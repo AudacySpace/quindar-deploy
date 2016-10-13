@@ -30,11 +30,4 @@ To deploy quindar using docker, do the following:
  * webmin  : 10000
  * netdata : 19999
  
-`docker run -d --cap-add SYS_PTRACE \
-			-v /proc:/host/proc:ro \
-			-v /sys:/host/sys:ro \
-			-p    22:22    \
-			-p    80:80    \
-			-p   443:443   \
-			-p 19999:19999 \						
-			quindar:ux`
+`docker run -d --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 22:22 -p 80:80 -p 443:443 -p 19999:19999 quindar:ux`
