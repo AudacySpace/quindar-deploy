@@ -17,17 +17,18 @@ Quindar has three components:
 
 To deploy quindar using docker, do the following:
 
-1. Install Docker
-2. Clone this repository
+1. Install Docker & Git, e.g. `yum install -y docker git`
+2. Clone this repository `git clone https://github.com/quindar/quindar-deploy`
+3. Build the docker image `docker build -t "quindar:ux" .`
+4. Run the image with ports mapped `docker run -d -t -p 80:80 quindar:ux`
 
-3. Build the docker image
-`docker build -t "quindar:ux" .`
 
-4. Run the docker image with ports mapped for various services 
+Note (1): 
+to remove / clean old images use `docker rm $(docker ps -a -q)`
 
- * ssh     : 22
- * nginx   : 80,443
- * webmin  : 10000
- * netdata : 19999
- 
-`docker run -d --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 22:22 -p 80:80 -p 443:443 -p 19999:19999 quindar:ux`
+Note (2): 
+to track the container hosts performance (versus the performance of the server in the container), add the following options to the docker run command `--cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro`
+
+Note (3):
+the netdata monitor is acessible via //hostname/netdata
+
