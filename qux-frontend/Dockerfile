@@ -31,5 +31,8 @@ RUN yum -y install zlib-devel libuuid-devel libmnl-devel gcc make git autoconf a
 
 # download it - the directory 'netdata' will be created
 RUN git clone https://github.com/firehol/netdata.git --depth=1
-RUN cd netdata && ./netdata-installer.sh
+RUN cd netdata && ./netdata-installer.sh --dont-wait && /
+	ln -sf /dev/stdout /var/log/netdata/access.log && /
+	ln -sf /dev/stdout /var/log/netdata/debug.log && /
+	ln -sf /dev/stderr /var/log/netdata/error.log
 
