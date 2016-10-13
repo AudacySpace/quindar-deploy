@@ -21,6 +21,7 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 
 #**** install netdata ****
 # https://github.com/firehol/netdata/wiki/Installation
+# netdata is proxied behind nginx, and accessible at \\hostname\netdata
 # start command /usr/sbin/netdata -D -s /host -p 19999
 #
  RUN yum -y install zlib-devel libuuid-devel libmnl-devel gcc make autoconf autoconf-archive autogen automake pkgconfig curl   && \
@@ -49,7 +50,7 @@ RUN yum install -y epel-release && \
 #**** start servers with container deploy
 # the last command can't exit, or the container will shutdown
 
-EXPOSE 80 443 19999
+EXPOSE 80
 CMD /usr/sbin/nginx && \
 	/usr/sbin/netdata -D -s /host -p 19999
 	
