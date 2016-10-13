@@ -2,18 +2,18 @@
 Files needed to deploy (install) Quindar.
 
 
-# Architecture
+## Architecture
 
 Quindar has three components:
 
-(1) The front end (gui)          > quindar-ux
-(2) The backend (server)         > quindar-svr
-(3) The simulator (data source)  > quindar-src
+1. The front end (gui)          > quindar-ux
+2. The backend (server)         > quindar-svr
+3. The simulator (data source)  > quindar-src
 
 
 
 
-# Install
+## Install
 
 To deploy quindar using docker, do the following:
 
