@@ -51,7 +51,7 @@ RUN yum install -y epel-release && \
 #**** start servers with container deploy
 # the last command can't exit, or the container will shutdown
 
-EXPOSE 80
+EXPOSE 80 443
 CMD /usr/sbin/nginx && \
 	/usr/sbin/netdata -D -s /host -p 19999
 	

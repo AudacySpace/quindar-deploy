@@ -17,10 +17,11 @@ Quindar has three components:
 
 To deploy quindar using docker, do the following:
 
-1. Install Docker & Git, e.g. `yum install -y docker git`
-2. Clone this repository `git clone https://github.com/quindar/quindar-deploy`
-3. Build the docker image `docker build -t "quindar:ux" .`
-4. Run the image with ports mapped `docker run -d -t -p 80:80 quindar:ux`
+1. Install Git, e.g. `yum install -y git`
+2. Install Docker (see https://docs.docker.com/engine/installation/)
+3. Clone this repository `git clone https://github.com/quindar/quindar-deploy`
+5. Build the docker image `docker build -t "quindar:ux" .`
+4. Run the image with ports mapped `docker run -d -t -p 80:80 443:443 quindar:ux`
 
 
 Note (1): 
