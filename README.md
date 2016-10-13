@@ -23,12 +23,16 @@ To deploy quindar using docker, do the following:
 
 ### Docker Deploy
 1. Clone this repository 
-`git clone https://github.com/quindar/quindar-deploy`
+```
+git clone https://github.com/quindar/quindar-deploy
+```
 
 2. Build & Deploy the frontend server
-`cd qux-frontend`
-`docker build -t "quindar:ux" .`
-`docker run -d -t --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar:ux`
+```
+cd qux-frontend
+docker build -t "quindar:ux" .
+docker run -d -t --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar:ux
+```
 
 Note: to remove / clean old images use `docker rm $(docker ps -a -q)`
 
