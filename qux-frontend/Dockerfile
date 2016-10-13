@@ -21,6 +21,7 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 
 #**** install netdata ****
 # https://github.com/firehol/netdata/wiki/Installation
+# https://github.com/firehol/netdata/wiki/Running-behind-nginx
 # netdata is proxied behind nginx, and accessible at \\hostname\netdata
 # start command /usr/sbin/netdata -D -s /host -p 19999
 #
