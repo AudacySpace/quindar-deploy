@@ -36,6 +36,5 @@ To deploy quindar using docker, do the following:
 			-p    22:22    \
 			-p    80:80    \
 			-p   443:443   \
-			-p 10000:10000 \			
 			-p 19999:19999 \						
 			quindar:ux`
