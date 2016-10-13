@@ -8,7 +8,7 @@ LABEL vendor="Audacy"
 
 # run system update & install utils
 RUN yum -y update --setopt=tsflags=nodocs   && \
-	yum -y install git wget
+	yum -y install git wget nano
 
 
 # #**** install webmin ****
@@ -37,6 +37,7 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 
 RUN yum install -y epel-release && \
 	yum install -y nginx
+	COPY nginx.conf /etc/nginx/nginx.conf
 	
 # Download certificate and copy to the build context
 # ADD nginx-repo.crt /etc/ssl/nginx/
