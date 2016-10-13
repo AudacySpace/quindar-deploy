@@ -21,7 +21,7 @@ To deploy quindar using docker, do the following:
 2. Install Docker (see https://docs.docker.com/engine/installation/)
 3. Clone this repository `git clone https://github.com/quindar/quindar-deploy`
 5. Build the docker image `docker build -t "quindar:ux" .`
-4. Run the image with ports mapped `docker run -d -t -p 80:80 443:443 quindar:ux`
+4. Run the image with ports mapped `docker run -d -t --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar:ux`
 
 
 Note (1): 
