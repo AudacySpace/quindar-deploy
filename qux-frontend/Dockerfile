@@ -24,9 +24,23 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
 	
+
 	
+
+	#**** install node ****
+# https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
+#
+RUN yum install -y gcc-c++    && \
+	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
+	yum -y install nodejs  && \
+	npm install -g bower && \
+	npm install -g gulp  && \
+	npm install -g mean-cli
+
+
 	
-#**** install nginx ****
+
+	#**** install nginx ****
 # server root    /usr/share/nginx/html
 # server config  /etc/nginx/nginx.conf
 # start command  /usr/sbin/nginx
@@ -48,22 +62,23 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY server.crt /etc/ssl/server.crt
 COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
-
+COPY index.html /usr/share/nginx/html
 	
-#**** install node ****
-# https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
-#
-#RUN yum install -y gcc-c++    && \
-#	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
-#	yum -y install nodejs  && \
-#	npm install -g bower && \
-#	npm install -g gulp  && \
-#	npm install -g mean-cli
-
-
+	
+	
+	
 
 #**** deploy quindar app ****
-# TBA
+# deploy from github under /node
+# node server should run on port 5000 > proxied via nginx to 443
+# start command: npm start
+#
+ENV repo https://github.com/heroku/node-js-sample.git
+RUN mkdir -p /node  && \
+	git clone --verbose $repo /node  && \
+	cd /node && \
+	npm install
+		
 	
 
 ##############################################################################	
@@ -72,9 +87,12 @@ RUN  chmod 600  /etc/ssl/server.key
 #**** start servers with container deploy
 # the last command can't exit, or the container will shutdown
 
+
 EXPOSE 80 443
 CMD /usr/sbin/nginx && \
-	/usr/sbin/netdata -D -s /host -p 19999
+	/usr/sbin/netdata -s /host -p 19999  && \
+ 	cd /node && npm start
+
 	
 
 
