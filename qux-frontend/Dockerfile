@@ -8,15 +8,7 @@ LABEL vendor="Audacy"
 
 # run system update & install utils
 RUN yum -y update --setopt=tsflags=nodocs   && \
-	yum -y install git wget nano
-
-
-# #**** install webmin ****
-# start command /etc/webmin/start
-#
-# RUN 	yum  -y install perl perl-Net-SSLeay openssl perl-IO-Tty    && \
-# 		wget http://prdownloads.sourceforge.net/webadmin/webmin-1.810-1.noarch.rpm  && \
-# 		rpm  -U webmin-1.810-1.noarch.rpm  
+	yum -y install git wget nano curl make
 
 
 #**** install netdata ****
@@ -25,10 +17,11 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 # netdata is proxied behind nginx, and accessible at \\hostname\netdata
 # start command /usr/sbin/netdata -D -s /host -p 19999
 #
- RUN yum -y install zlib-devel libuuid-devel libmnl-devel gcc make autoconf autoconf-archive autogen automake pkgconfig curl   && \
+ RUN yum -y install zlib-devel libuuid-devel libmnl-devel gcc make autoconf autoconf-archive autogen automake pkgconfig   && \
 	git clone https://github.com/firehol/netdata.git --depth=1    && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
+	
 	
 	
 #**** install nginx ****
@@ -46,6 +39,22 @@ RUN yum install -y epel-release && \
 # ADD nginx-repo.key /etc/ssl/nginx/
 	
 
+	
+#**** install node ****
+# https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
+
+RUN yum install -y gcc-c++    && \
+	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
+	yum -y install nodejs  && \
+	npm install -g bower && \
+	npm install -g gulp  && \
+	npm install -g mean-cli
+
+
+
+#**** deploy quindar app ****
+# TBA
+	
 	
 	
 #**** start servers with container deploy
