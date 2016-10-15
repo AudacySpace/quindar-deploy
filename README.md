@@ -1,10 +1,5 @@
 # quindar-deploy
-Files needed to deploy (install) Quindar.
-
-
-## Architecture
-
-Quindar has three components:
+Files needed to deploy (install) Quindar; the complete Quindar platform has three components:
 
 1. The front end (gui)          > quindar-ux
 2. The backend (server)         > quindar-svr
