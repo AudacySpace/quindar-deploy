@@ -19,7 +19,7 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 # netdata is proxied behind nginx, and accessible at \\hostname\netdata
 # start command /usr/sbin/netdata -D -s /host -p 19999
 #
- RUN yum -y install zlib-devel libuuid-devel libmnl-devel gcc make autoconf autoconf-archive autogen automake pkgconfig   && \
+ RUN yum -y install zlib-devel libuuid-devel libmnl-devel gcc autoconf autoconf-archive autogen automake pkgconfig python tc python-yaml  && \
 	git clone https://github.com/firehol/netdata.git --depth=1    && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
