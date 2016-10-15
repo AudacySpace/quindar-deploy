@@ -73,7 +73,7 @@ COPY index.html /usr/share/nginx/html
 # node server should run on port 5000 > proxied via nginx to 443
 # start command: npm start
 #
-ENV repo https://github.com/heroku/node-js-sample.git
+ENV repo https://github.com/quindar/quindar-ux.git
 RUN mkdir -p /node  && \
 	git clone --verbose $repo /node  && \
 	cd /node && \
