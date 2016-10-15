@@ -6,7 +6,7 @@
 
 # get absolute path where this file is
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-echo "building in $DIR"
+echo "building in " $DIR
 
 # change working dir
 pushd $DIR
