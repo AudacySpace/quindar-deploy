@@ -73,11 +73,13 @@ COPY index.html /usr/share/nginx/html
 # node server should run on port 5000 > proxied via nginx to 443
 # start command: npm start
 #
-ENV repo https://github.com/quindar/quindar-ux.git
-RUN mkdir -p /node  && \
-	git clone --verbose $repo /node  && \
-	cd /node && \
-	npm install
+ENV  repo https://github.com/quindar/quindar-ux.git
+COPY node-update.sh /bin/node-update.sh
+RUN  chmod a+x /bin/node-update.sh
+RUN  mkdir -p /node  && \
+	 git clone --verbose $repo /node  && \
+	 cd /node && \
+	 npm install
 		
 	
 
