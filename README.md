@@ -22,9 +22,7 @@ git clone https://github.com/quindar/quindar-deploy
 
 Step 3 - Build & Deploy the frontend server
 ```
-cd quindar-deploy/qux-frontend
-sudo docker build -t "quindar:ux" .
-sudo docker run -d -t --name qux --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar:ux
+sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
 ```
 
 If you want to remove old images use `docker rm $(docker ps -a -q)`. The nginx server is deployed with self-signed certificates which will throw security warnings in your browser. In a production environment, SSH into the server and (1) update server name, (2) install your own certs. 
