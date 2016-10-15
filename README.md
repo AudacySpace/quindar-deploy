@@ -22,6 +22,7 @@ git clone https://github.com/quindar/quindar-deploy
 
 Step 3 - Build & Deploy the frontend server
 ```
+chmod +x ./quindar-deploy/qux-frontend/deploy-qux.sh
 sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
 ```
 
