@@ -27,7 +27,7 @@ git clone https://github.com/quindar/quindar-deploy
 
 Step 3 - Build & Deploy the frontend server
 ```
-cd qux-frontend
+cd quindar-deploy/qux-frontend
 docker build -t "quindar:ux" .
 docker run -d -t --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar:ux
 ```
@@ -41,3 +41,13 @@ restart nginx       nginx -s reload
 ```
 
 
+
+## qsvr Install
+
+To be added.
+
+
+
+## qsrc Install
+
+To be added.
