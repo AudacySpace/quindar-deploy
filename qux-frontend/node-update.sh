@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 #
 # server update script, can be called by Jenkins on updates, cron as scheduled,
 # or executed by hand manually by running this script.
@@ -29,6 +29,10 @@ echo "---------------------------------------------------------------------"
 cp -fvR /tmp/github-update/new/* /node/
 cd /node
 npm install
+
+echo "---------------------------------------------------------------------"
+echo "bouncing node server  ..."
+echo "---------------------------------------------------------------------"
 npm stop
 npm start &
 

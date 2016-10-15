@@ -24,7 +24,18 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
 
+	
+#**** install node ****
+# https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
+# 
+# start command: npm start & 
 
+RUN yum install -y gcc-c++    && \
+	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
+	yum -y install nodejs  && \
+	npm install -g bower && \
+	npm install -g gulp  && \
+	npm install -g mean-cli
 	
 	
 #**** install nginx ****
@@ -51,22 +62,6 @@ COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
 COPY index.html /usr/share/nginx/html
 
-	
-
-	
-#**** install node ****
-# https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
-#
-# start command: npm start & 
-
-RUN yum install -y gcc-c++    && \
-	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
-	yum -y install nodejs  && \
-	npm install -g bower && \
-	npm install -g gulp  && \
-	npm install -g mean-cli
-
-	
 	
 
 #**** deploy quindar app ****
@@ -98,6 +93,7 @@ RUN  mkdir -p /node  && \
 
 EXPOSE 80 443
 CMD /usr/sbin/nginx && \
+	cd /node && (npm start &)  && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
 	
