@@ -22,5 +22,6 @@ echo "bouncing node server  ..."
 echo "---------------------------------------------------------------------"
 npm stop
 cmd="npm start"
-disown -h $cmd &
+nohup cmd >server.log 2>&1 </dev/null &
+
 
