@@ -21,5 +21,6 @@ echo "---------------------------------------------------------------------"
 echo "bouncing node server  ..."
 echo "---------------------------------------------------------------------"
 npm stop
-disown -h npm start &
-exit 0
+cmd="npm start"
+disown -h $cmd &
+
