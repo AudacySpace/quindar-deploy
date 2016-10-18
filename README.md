@@ -5,33 +5,32 @@ Files needed to deploy (install) Quindar; the complete Quindar platform has thre
 2. The backend (server)         > quindar-svr
 3. The simulator (data source)  > quindar-src
 
+## pre-requisites
 
-
-
-## qux Install
-
-Step 1 - Install the pre-requisites on the host server
+Step 1 - prepare the hosts
+Install the pre-requisites on the host server(s). You can deploy all three components (source, server, ux) on one host running docker or run individual machines for each. If you want to remove old images first use `docker rm $(docker ps -a -q)`. 
 
 * Install Git, e.g. `yum install -y git`
 * Install Docker (see https://docs.docker.com/engine/installation/)
 
 Step 2 - Clone this repository 
+
 ```
 git clone https://github.com/quindar/quindar-deploy
 ```
 
-Step 3 - Build & Deploy the frontend server
-```
-chmod +x ./quindar-deploy/qux-frontend/deploy-qux.sh
-sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
-```
-
-If you want to remove old images use `docker rm $(docker ps -a -q)`. The nginx server is deployed with self-signed certificates which will throw security warnings in your browser. In a production environment, SSH into the server and (1) update server name, (2) install your own certs. 
+The nginx servers are deployed with self-signed certificates which will throw security warnings in your browser. In a production environment, SSH into the servers and (1) update server name, (2) install your own certs. 
 
 ```
 server certificate  /etc/ssl/server.crt
 server key          /etc/ssl/server.key
 restart nginx       nginx -s reload
+```
+
+## qux Install
+```
+chmod +x ./quindar-deploy/qux-frontend/deploy-qux.sh
+sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
 ```
 
 You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host). This is useful for either scheduled updates or build automation via Jenkins, etc. 
@@ -40,14 +39,18 @@ You can update the node application after the docker container is deployed (runn
 sudo docker exec qux node-update.sh
 ```
 
-
-
-
 ## qsvr Install
 
-To be added.
+```
+chmod +x ./quindar-deploy/qsvr-backend/deploy-qsvr.sh
+sudo ./quindar-deploy/qsvr-backend/deploy-qsvr.sh
+```
 
+You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host). This is useful for either scheduled updates or build automation via Jenkins, etc. 
 
+```
+sudo docker exec qux node-update.sh
+```
 
 ## qsrc Install
 
