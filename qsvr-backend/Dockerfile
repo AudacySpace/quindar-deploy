@@ -60,8 +60,17 @@ COPY index.html /usr/share/nginx/html
 # the last command can't exit, or the container will shutdown
 
 
+#**** start servers with container deploy
+# 
+# (1) nginx
+# (2) netdata
+#
+# the last command can't exit, or the container will shutdown
+
+
 EXPOSE 80 443
-CMD /usr/sbin/netdata -D -s /host -p 19999 
+CMD /usr/sbin/nginx && \
+	/usr/sbin/netdata -D -s /host -p 19999 
  
 	
 
