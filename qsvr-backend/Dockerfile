@@ -24,22 +24,7 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
 
-	
 
-##############################################################################	
-
-	
-#**** start servers with container deploy
-# 
-# (1) netdata
-#
-# the last command can't exit, or the container will shutdown
-
-
-EXPOSE 19999
-CMD /usr/sbin/netdata -D -s /host -p 19999 
- 
-	
 #**** install nginx ****
 # server root    /usr/share/nginx/html
 # server config  /etc/nginx/nginx.conf
@@ -63,4 +48,21 @@ COPY server.crt /etc/ssl/server.crt
 COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
 COPY index.html /usr/share/nginx/html
+	
+
+##############################################################################	
+
+	
+#**** start servers with container deploy
+# 
+# (1) netdata
+#
+# the last command can't exit, or the container will shutdown
+
+
+EXPOSE 80 443
+CMD /usr/sbin/netdata -D -s /host -p 19999 
+ 
+	
+
 
