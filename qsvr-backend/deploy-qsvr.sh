@@ -12,10 +12,10 @@ echo "building in " $DIR
 pushd $DIR
 
 # build the container
-sudo docker build -t "quindar-qux" .
+sudo docker build -t "quindar-qsvr" .
 
 # deploy it
-sudo docker run -d -t --name qux --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar-qux
+sudo docker run -d -t --name qsvr --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar-qsvr
 
 # return to where we were called from 
 popd
