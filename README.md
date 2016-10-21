@@ -27,7 +27,7 @@ server key          /etc/ssl/server.key
 restart nginx       nginx -s reload
 ```
 
-## qux Install
+# qux Install
 ```
 chmod +x ./quindar-deploy/qux-frontend/deploy-qux.sh
 sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
@@ -39,15 +39,27 @@ cd quindar-deploy/qux-frontend
 docker build -t "quindar-qux" .
 docker run -d -t --name qux --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar-qux
 ```
-
-
 You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host). This is useful for either scheduled updates or build automation via Jenkins, etc. 
 
 ```
 sudo docker exec qux node-update.sh
 ```
 
-## qsvr Install
+## developer setup
+
+If you want to have access to the source application files inside the docker container from your local host, then use the following command to run the container which maps the /node directory inside the container to a directory of your choosing on the host. 
+
+```
+docker run -d -t --name qux --cap-add SYS_PTRACE -v /node:/Users/<your username>/quindar-ux-src -p 80:80 -p 443:443 quindar-qux
+```
+You can commit & push your changes to GitHub straight from the host
+
+
+
+
+
+
+# qsvr Install
 
 ```
 chmod +x ./quindar-deploy/qsvr-backend/deploy-qsvr.sh
@@ -60,7 +72,7 @@ You can update the node application after the docker container is deployed (runn
 sudo docker exec qux node-update.sh
 ```
 
-## qsrc Install
+# qsrc Install
 
 To be added.
 
