@@ -35,7 +35,7 @@ sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
 
 Or doing it by hand (rather than using a script) if you are on a windows host:
 ```
-cd quindar-ux
+cd quindar-deploy/qux-frontend
 docker build -t "quindar-qux" .
 docker run -d -t --name qux --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar-qux
 ```
