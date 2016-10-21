@@ -27,6 +27,8 @@ server key          /etc/ssl/server.key
 restart nginx       nginx -s reload
 ```
 
+
+
 # qux Install
 ```
 chmod +x ./quindar-deploy/qux-frontend/deploy-qux.sh
@@ -50,7 +52,7 @@ sudo docker exec qux node-update.sh
 If you want to have access to the source application files inside the docker container from your local host, then use the following command to run the container which maps the /node directory inside the container to a directory of your choosing on the host. 
 
 ```
-docker run -d -t --name qux --cap-add SYS_PTRACE -v /node:/Users/<your username>/quindar-ux-src -p 80:80 -p 443:443 quindar-qux
+docker run -d -t --name qux --cap-add SYS_PTRACE -v $PWD/quindar-ux-src:/node -p 80:80 -p 443:443 quindar-qux
 ```
 You can commit & push your changes to GitHub straight from the host
 
