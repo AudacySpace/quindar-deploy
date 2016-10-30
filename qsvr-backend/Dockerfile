@@ -76,7 +76,6 @@ COPY index.html /usr/share/nginx/html
 # port number    27017
 
 # Create a /etc/yum.repos.d/mongodb-org-3.2.repo file so that you can install MongoDB directly, using yum.
-
 RUN echo $'[mongodb-org-3.2] \n\
 name	=	MongoDB Repository	\n\
 baseurl	=	https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/ \n\
@@ -86,6 +85,10 @@ gpgkey	=	https://www.mongodb.org/static/pgp/server-3.2.asc' > /etc/yum.repos.d/m
 		  
 RUN yum install -y mongodb-org && \
 	mkdir -p /data/db
+	
+# create default admin user
+COPY mongo_init.js /data/mongo_init.js
+RUN mongo admin /data/mongo_init.js
 
 
 #**** setup adminMongo
