@@ -25,6 +25,19 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
 
 
+#**** install node ****
+# https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
+# 
+# start command: npm start & 
+
+RUN yum install -y gcc-c++    && \
+	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
+	yum -y install nodejs  && \
+	npm install -g bower && \
+	npm install -g gulp  && \
+	npm install -g mean-cli
+
+	
 #**** install nginx ****
 # server root    /usr/share/nginx/html
 # server config  /etc/nginx/nginx.conf
@@ -58,7 +71,7 @@ COPY index.html /usr/share/nginx/html
 # 
 # server config  /etc/mongod.conf
 # start command  /usr/bin/mongod
-# file location  /var/lib/mongo
+# file location  /data/db
 # logs location  /var/log/mongodb
 # port number    27017
 
@@ -73,10 +86,16 @@ gpgkey	=	https://www.mongodb.org/static/pgp/server-3.2.asc' > /etc/yum.repos.d/m
 		  
 RUN yum install -y mongodb-org && \
 	mkdir -p /data/db
-	
-# To-Do
-# mongoExpress : https://www.npmjs.com/package/mongo-express
 
+
+#**** setup adminMongo
+# deploy under /node/adminMongo
+# node server runs on port 1234 > proxied via nginx to 443
+# start command: npm start
+#
+RUN  mkdir -p /node/adminMongo  && \
+	 cd /node/adminMongo && \
+	 npm install admin-mongo
 	
 
 ##############################################################################	
@@ -86,7 +105,8 @@ RUN yum install -y mongodb-org && \
 # 
 # (1) nginx
 # (2) netdata
-# (3) mongodb
+# (3) node
+# (4) mongodb
 #
 # the last command can't exit, or the container will shutdown
 
@@ -94,6 +114,7 @@ RUN yum install -y mongodb-org && \
 EXPOSE 80 443 27017
 CMD /usr/sbin/nginx && \
 	/usr/sbin/netdata -s /host -p 19999 && \
+	cd /node/adminMongo && (npm start &)  && \
 	/usr/bin/mongod
  
 	
