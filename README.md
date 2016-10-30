@@ -30,49 +30,35 @@ restart nginx       nginx -s reload
 
 
 # qux Install
-```
-chmod +x ./quindar-deploy/qux-frontend/deploy-qux.sh
-sudo ./quindar-deploy/qux-frontend/deploy-qux.sh
-```
 
-Or doing it by hand (rather than using a script) if you are on a windows host:
 ```
 cd quindar-deploy/qux-frontend
 docker build -t "quindar-qux" .
 docker run -d -t --name qux --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 quindar-qux
 ```
+
+The quindar gui will be running on http://hostname
+
 You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host). This is useful for either scheduled updates or build automation via Jenkins, etc. 
 
 ```
 sudo docker exec qux node-update.sh
 ```
-
-## developer setup
-
-If you want to have access to the source application files inside the docker container from your local host, then use the following command to run the container which maps the /node directory inside the container to a directory of your choosing on the host. 
-
-```
-docker run -d -t --name qux --cap-add SYS_PTRACE -v $PWD/quindar-ux-src:/node -p 80:80 -p 443:443 quindar-qux
-```
-You can commit & push your changes to GitHub straight from the host
-
-
-
-
 
 
 # qsvr Install
 
 ```
-chmod +x ./quindar-deploy/qsvr-backend/deploy-qsvr.sh
-sudo ./quindar-deploy/qsvr-backend/deploy-qsvr.sh
+cd quindar-deploy/qsvr-backend
+docker build -t "quindar-qsvr" .
+docker run -d -t --name qsvr --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 -p 27017:27017 quindar-qsvr
+```
+The database will be available on port 27017, and the server gui will be running on http://hostname. To connect to the database admin interface, click on the "Login" link (forwards to https://hostname) and use the following connection string in the admin gui to link the database:
+
+```
+mongodb://admin@localhost
 ```
 
-You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host). This is useful for either scheduled updates or build automation via Jenkins, etc. 
-
-```
-sudo docker exec qux node-update.sh
-```
 
 # qsrc Install
 
