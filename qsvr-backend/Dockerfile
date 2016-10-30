@@ -48,6 +48,35 @@ COPY server.crt /etc/ssl/server.crt
 COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
 COPY index.html /usr/share/nginx/html
+
+
+#**** install Mongo db ****
+# https://docs.mongodb.com/v3.2/tutorial/install-mongodb-on-red-hat/
+# 
+# NOTE: in a production setup you should use a separate db server / service. 
+# This included db is just used for demonstration & development use. 
+# 
+# server config  /etc/mongod.conf
+# start command  /usr/bin/mongod
+# file location  /var/lib/mongo
+# logs location  /var/log/mongodb
+# port number    27017
+
+# Create a /etc/yum.repos.d/mongodb-org-3.2.repo file so that you can install MongoDB directly, using yum.
+
+RUN echo $'[mongodb-org-3.2] \n\
+name	=	MongoDB Repository	\n\
+baseurl	=	https://repo.mongodb.org/yum/redhat/$releasever/mongodb-org/3.2/x86_64/ \n\
+gpgcheck=	1 \n\
+enabled	=	1 \n\
+gpgkey	=	https://www.mongodb.org/static/pgp/server-3.2.asc' > /etc/yum.repos.d/mongodb-org-3.2.repo
+		  
+RUN yum install -y mongodb-org && \
+	mkdir -p /data/db
+	
+# To-Do
+# mongoExpress : https://www.npmjs.com/package/mongo-express
+
 	
 
 ##############################################################################	
@@ -55,22 +84,17 @@ COPY index.html /usr/share/nginx/html
 	
 #**** start servers with container deploy
 # 
-# (1) netdata
-#
-# the last command can't exit, or the container will shutdown
-
-
-#**** start servers with container deploy
-# 
 # (1) nginx
 # (2) netdata
+# (3) mongodb
 #
 # the last command can't exit, or the container will shutdown
 
 
-EXPOSE 80 443
+EXPOSE 80 443 27017
 CMD /usr/sbin/nginx && \
-	/usr/sbin/netdata -D -s /host -p 19999 
+	/usr/sbin/netdata -s /host -p 19999 && \
+	/usr/bin/mongod
  
 	
 
