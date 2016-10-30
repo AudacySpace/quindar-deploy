@@ -86,16 +86,12 @@ gpgkey	=	https://www.mongodb.org/static/pgp/server-3.2.asc' > /etc/yum.repos.d/m
 RUN yum install -y mongodb-org && \
 	mkdir -p /data/db
 	
-# create default admin user
-COPY mongo_init.js /data/mongo_init.js
-RUN mongo admin /data/mongo_init.js
-
 
 #**** setup adminMongo
 # deploy under /node/adminMongo
 # node server runs on port 1234 > proxied via nginx to 443
 # start command: npm start
-#
+# connection string for db : mongodb://admin@localhost
 RUN  mkdir -p /node/adminMongo  && \
 	 cd /node/adminMongo && \
 	 npm install admin-mongo
