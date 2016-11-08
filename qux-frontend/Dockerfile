@@ -28,14 +28,17 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 #**** install node ****
 # https://nodejs.org/en/download/package-manager/#enterprise-linux-and-fedora
 # 
-# start command: npm start & 
+# start command: pm2 start $APP --no-daemon --watch &
+# where $APP is the main file name (e.g. index.js) or can be specified at runtime
+# if additional options to the --watch flag are desired, add a config.json file to the build (tbd)
 
 RUN yum install -y gcc-c++    && \
 	curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - && \
 	yum -y install nodejs  && \
 	npm install -g bower && \
 	npm install -g gulp  && \
-	npm install -g mean-cli
+	npm install -g mean-cli && \
+	npm install -g pm2
 	
 	
 #**** install nginx ****
@@ -93,7 +96,7 @@ RUN  mkdir -p /node  && \
 
 EXPOSE 80 443
 CMD /usr/sbin/nginx && \
-	cd /node && (npm start &)  && \
+	cd /node && (pm2 start index.js --no-daemon --watch &) && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
 	
