@@ -39,10 +39,10 @@ docker run -d -t --name qux --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:
 
 The quindar gui will be running on http://hostname
 
-You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host). This is useful for either scheduled updates or build automation via Jenkins, etc. 
+You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host); the last parameter is the name of the repo branch you want to use for the update; either "master" for production, or "develop" for the development branch. This is useful for either scheduled updates or build automation via Jenkins, etc. 
 
 ```
-sudo docker exec qux node-update.sh
+sudo docker exec qux node-update.sh <branch>
 ```
 
 
