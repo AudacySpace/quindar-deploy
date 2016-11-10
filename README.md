@@ -66,8 +66,11 @@ mongodb://admin@localhost
 ```
 cd quindar-deploy/qsrc-backend
 docker build -t "quindar-qsrc" .
-docker run -d -t --name qsrc --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 19999:80 quindar-qsrc
+docker run -d -t --name qsrc --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 5901:5901 -p 6901:6901 -p 19999:19999  quindar-qsrc
 ```
+
+Connect with VNC viewer at "hostname:5901" with the passowrd "vncpassword"
+Connect to netdata at "http://hostname:19999" 
 
 
 
