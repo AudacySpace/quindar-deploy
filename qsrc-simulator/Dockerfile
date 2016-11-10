@@ -48,10 +48,10 @@ ENV VNC_PW vncpassword
 RUN yum -y install tigervnc-server net-tools  && \
     yum -y update; yum clean all
 
-ADD .vnc /root/.vnc
-ADD .config /root/.config
-ADD Desktop /root/Desktop
-ADD scripts /root/scripts
+ADD ./vnc/.vnc /root/.vnc
+ADD ./vnc/.config /root/.config
+ADD ./vnc/Desktop /root/Desktop
+ADD ./vnc/scripts /root/scripts
 RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc /root/Desktop/*.desktop
 RUN /bin/dbus-uuidgen > /etc/machine-id
 
@@ -71,6 +71,37 @@ RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
     chmod +x -v /root/noVNC/utils/*.sh	
 	
 
+#**** install nginx ****
+# server root    /usr/share/nginx/html
+# server config  /etc/nginx/nginx.conf
+# start command  /usr/sbin/nginx
+#
+# NOTE: the server is deployed with self-signed certificates which will throw
+#       security warnings in your browser. In a production environment, SSH into
+#       the server and (1) update server name, (2) install your own certs.
+# 		Self-signed certs for your specific org can be generated using:
+#
+# openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/server.key -out /etc/ssl/server.crt
+# nginx -s reload
+#
+
+RUN yum install -y epel-release && \
+	yum install -y nginx && \
+	mkdir -p /etc/ssl
+
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/server.crt /etc/ssl/server.crt
+COPY ./nginx/server.key /etc/ssl/server.key
+COPY ./nginx/index.html /usr/share/nginx/html
+COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
+RUN  chmod 600  /etc/ssl/server.key
+
+
+#**** install GMAT ****
+# 
+# 
+
+
 	
 
 ##############################################################################	
@@ -78,14 +109,16 @@ RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
 	
 #**** start servers with container deploy
 # 
-# (1) netdata [19999]
-# (2) xvnc [5901] > NoVNC [6901] server
+# (1) nginx (80,443)
+# (2) xvnc [5901] > NoVNC [6901] server > nginx [443]
+# (3) netdata [19999] > nginx [80]
 #
 # the last command can't exit, or the container will shutdown
 
 
-EXPOSE 6901 19999
-CMD /root/scripts/vnc_startup.sh  && \
+EXPOSE 80 443
+CMD /usr/sbin/nginx && \
+	/root/scripts/vnc_startup.sh  && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
 	
