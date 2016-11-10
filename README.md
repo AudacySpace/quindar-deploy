@@ -62,6 +62,12 @@ mongodb://admin@localhost
 
 # qsrc Install
 
-To be added.
+
+```
+cd quindar-deploy/qsrc-backend
+docker build -t "quindar-qsrc" .
+docker run -d -t --name qsrc --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 19999:80 quindar-qsrc
+```
+
 
 
