@@ -62,6 +62,8 @@ RUN /bin/dbus-uuidgen > /etc/machine-id
 # https://github.com/kanaka/noVNC
 #
 ENV NO_VNC_HOME /root/noVNC
+RUN yum -y install which  && \
+    yum -y update; yum clean all
 
 RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
     wget -qO- https://github.com/kanaka/noVNC/archive/master.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME  && \
@@ -77,12 +79,12 @@ RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
 #**** start servers with container deploy
 # 
 # (1) netdata [19999]
-# (2) xvnc [5901] & NoVNC [6901] servers
+# (2) xvnc [5901] > NoVNC [6901] server
 #
 # the last command can't exit, or the container will shutdown
 
 
-EXPOSE 5901 6901 19999
+EXPOSE 6901 19999
 CMD /root/scripts/vnc_startup.sh  && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
