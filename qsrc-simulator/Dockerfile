@@ -71,6 +71,7 @@ RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
     chmod +x -v /root/noVNC/utils/*.sh	
 	
 
+	
 #**** install nginx ****
 # server root    /usr/share/nginx/html
 # server config  /etc/nginx/nginx.conf
@@ -97,9 +98,32 @@ COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
 RUN  chmod 600  /etc/ssl/server.key
 
 
+#**** install Python ****
+# 
+RUN yum -y groupinstall "Development Tools" && \
+	yum -y install csh 						&& \
+	yum -y install gtk3-devel				&& \
+	yum -y install freeglut-devel			&& \
+	yum -y install cmake					&& \	
+    yum -y update; yum clean all	
+
+RUN wget https://www.python.org/ftp/python/3.4.3/Python-3.4.3.tar.xz
+RUN tar xf Python-3.* 
+RUN /bin/sh -c 'cd /Python-3.*; ./configure --enable-shared'
+RUN /bin/sh -c 'cd /Python-3.*; LD_RUN_PATH=/usr/local/lib make'
+RUN /bin/sh -c 'cd /Python-3.*; make altinstall'
+
+
 #**** install GMAT ****
 # 
-# 
+# deploy from github under /gmat
+#
+ENV  repo https://github.com/quindar/quindar-gmat.git
+RUN  mkdir -p /gmat  && \
+	 git clone --verbose $repo /gmat
+
+COPY gmat-update.sh /bin/gmat-update.sh
+RUN  chmod a+x /bin/gmat-update.sh
 
 
 	
