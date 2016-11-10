@@ -34,7 +34,7 @@ RUN yum -y install epel-release && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
 	
 	
-#**** install vnc server & noVNC HTML5 based VNC viewer ****
+#**** install vnc server ****
 # VNC server port      : 5901
 # start command        : /root/scripts/vnc_startup.sh
 # default vnc password : vncpassword
@@ -44,22 +44,30 @@ ENV DISPLAY :1
 ENV VNC_COL_DEPTH 24
 ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
-ENV NO_VNC_HOME /root/noVNC
 
 RUN yum -y install tigervnc-server net-tools  && \
     yum -y update; yum clean all
 
-RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
-    wget -qO- https://github.com/kanaka/noVNC/archive/master.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME  && \
-    wget -qO- https://github.com/kanaka/websockify/archive/v0.7.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
-    chmod +x -v /root/noVNC/utils/*.sh	
-	
 ADD .vnc /root/.vnc
 ADD .config /root/.config
 ADD Desktop /root/Desktop
 ADD scripts /root/scripts
 RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc /root/Desktop/*.desktop
 RUN /bin/dbus-uuidgen > /etc/machine-id
+
+
+	
+#**** noVNC HTML5 based VNC viewer ****
+#	
+# https://github.com/kanaka/noVNC
+#
+ENV NO_VNC_HOME /root/noVNC
+
+RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
+    wget -qO- https://github.com/kanaka/noVNC/archive/master.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME  && \
+    wget -qO- https://github.com/kanaka/websockify/archive/v0.7.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
+    chmod +x -v /root/noVNC/utils/*.sh	
+	
 
 	
 
