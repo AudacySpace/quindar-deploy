@@ -9,3 +9,4 @@ Categories=Utility;X-XFCE;
 Name=Application Finder
 Comment=Find and launch applications installed on your system
 X-XFCE-Source=file:///usr/share/applications/xfce4-appfinder.desktop
+

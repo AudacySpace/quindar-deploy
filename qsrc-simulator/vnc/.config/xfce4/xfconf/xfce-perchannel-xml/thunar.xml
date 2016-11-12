@@ -21,3 +21,4 @@
 <channel name="thunar" version="1.0">
     <property name="last-view" type="string" value="ThunarIconView"/>
 </channel>
+
