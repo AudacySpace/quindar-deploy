@@ -52,7 +52,7 @@ ADD ./vnc/.vnc /root/.vnc
 ADD ./vnc/.config /root/.config
 ADD ./vnc/scripts /root/scripts
 RUN mkdir -p /root/Desktop
-RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc /root/Desktop/*.desktop
+RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc
 RUN /bin/dbus-uuidgen > /etc/machine-id
 
 
