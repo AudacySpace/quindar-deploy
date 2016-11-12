@@ -51,8 +51,8 @@ RUN yum -y install tigervnc-server net-tools  && \
 ADD ./vnc/.vnc /root/.vnc
 ADD ./vnc/.config /root/.config
 ADD ./vnc/scripts /root/scripts
-RUN mkdir -p /root/Desktop
-RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc
+ADD ./vnc/Desktop /root/Desktop
+RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc /root/Desktop/*.desktop
 RUN /bin/dbus-uuidgen > /etc/machine-id
 
 
