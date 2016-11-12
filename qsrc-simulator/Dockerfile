@@ -50,8 +50,8 @@ RUN yum -y install tigervnc-server net-tools  && \
 
 ADD ./vnc/.vnc /root/.vnc
 ADD ./vnc/.config /root/.config
-ADD ./vnc/Desktop /root/Desktop
 ADD ./vnc/scripts /root/scripts
+RUN mkdir -p /root/Desktop
 RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc /root/Desktop/*.desktop
 RUN /bin/dbus-uuidgen > /etc/machine-id
 
@@ -120,10 +120,11 @@ RUN /bin/sh -c 'cd /Python-3.*; make altinstall'
 #
 ENV  repo https://github.com/quindar/quindar-gmat.git
 RUN  mkdir -p /gmat  && \
-	 git clone --verbose $repo /gmat
+	 git clone --verbose $repo /gmat  
 
 COPY gmat-update.sh /bin/gmat-update.sh
 RUN  chmod a+x /bin/gmat-update.sh
+RUN  cd /gmat && ln -s /gmat /root/Desktop/NASA-GMAT
 
 
 	
