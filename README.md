@@ -69,8 +69,11 @@ docker build -t "quindar-qsrc" .
 docker run -d -t --name qsrc --cap-add SYS_PTRACE -v /proc:/host/proc:ro -p 80:80 -p 443:443 -p 5901:5901 quindar-qsrc
 ```
 
-Connect to the server at http://hostname or you can access the VNC server directly with a VNC client (e.g. https://www.realvnc.com/download/viewer/) at hostname:5901 using password "vncpassword".
+Connect to the server at http://hostname or you can access the VNC server directly with a [VNC client](https://www.realvnc.com/download/viewer/) at hostname:5901 using password "vncpassword".
 
+You can update GMAT inside the docker container while running from the host with the following command (on the host); the last parameter is the name of the repo branch you want to use for the update; either "master" for production, or "develop" for the development branch. This is useful for either scheduled updates or build automation via Jenkins, etc. 
 
-
+```
+sudo docker exec qsrc gmat-update.sh <branch>
+```
 
