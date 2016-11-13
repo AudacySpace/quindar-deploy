@@ -1,0 +1,15 @@
+[Desktop Entry]
+Version=1.0
+Name=NASA GMAT (GUI)
+GenericName=NASA GMAT
+Comment=General Mission Simulation Tool
+Exec=/gmat/application/bin/GMAT-R2015a
+Icon=emblem-web
+Terminal=true
+Type=Application
+MimeType=
+StartupNotify=true
+Categories=
+X-Desktop-File-Install-Version=0.21
+
+Path=/gmat/application/bin

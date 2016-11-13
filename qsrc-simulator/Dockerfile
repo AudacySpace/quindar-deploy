@@ -8,18 +8,10 @@ LABEL vendor="Audacy"
 
 # run system update & install utils
 RUN yum -y update --setopt=tsflags=nodocs   && \
-	yum -y install git wget nano curl make  && \
-    yum -y update; yum clean all
+	yum -y install git wget nano curl make dos2unix  && \
+    yum clean all
 
 ##############################################################################
-
-
-#**** install xfce ****
-ENV TERM xterm
-RUN yum -y install epel-release && \
-	yum --enablerepo=epel -y -x gnome-keyring --skip-broken groups install "Xfce"  && \
-	yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts" && \
-    yum -y update; yum clean all
 
 
 #**** install netdata ****
@@ -32,44 +24,6 @@ RUN yum -y install epel-release && \
 	git clone https://github.com/firehol/netdata.git --depth=1    && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
-	
-	
-#**** install vnc server ****
-# VNC server port      : 5901
-# start command        : /root/scripts/vnc_startup.sh
-# default vnc password : vncpassword
-# NoVNC web URL        : http://localhost:6901/vnc_auto.html?password=vncpassword
-
-ENV DISPLAY :1
-ENV VNC_COL_DEPTH 24
-ENV VNC_RESOLUTION 1280x1024
-ENV VNC_PW vncpassword
-
-RUN yum -y install tigervnc-server net-tools  && \
-    yum -y update; yum clean all
-
-ADD ./vnc/.vnc /root/.vnc
-ADD ./vnc/.config /root/.config
-ADD ./vnc/scripts /root/scripts
-ADD ./vnc/Desktop /root/Desktop
-RUN chmod +x  /root/scripts/*.sh /root/.vnc/xstartup /etc/xdg/xfce4/xinitrc /root/Desktop/*.desktop
-RUN /bin/dbus-uuidgen > /etc/machine-id
-
-
-	
-#**** noVNC HTML5 based VNC viewer ****
-#	
-# https://github.com/kanaka/noVNC
-#
-ENV NO_VNC_HOME /root/noVNC
-RUN yum -y install which  && \
-    yum -y update; yum clean all
-
-RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
-    wget -qO- https://github.com/kanaka/noVNC/archive/master.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME  && \
-    wget -qO- https://github.com/kanaka/websockify/archive/v0.7.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
-    chmod +x -v /root/noVNC/utils/*.sh	
-	
 
 	
 #**** install nginx ****
@@ -94,15 +48,13 @@ COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ./nginx/server.crt /etc/ssl/server.crt
 COPY ./nginx/server.key /etc/ssl/server.key
 COPY ./nginx/index.html /usr/share/nginx/html
-COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
 RUN  chmod 600  /etc/ssl/server.key
-
 
 #**** install Python ****
 # 
 RUN yum -y groupinstall "Development Tools" && \
 	yum -y install csh 						&& \
-	yum -y install gtk3-devel				&& \
+	yum -y install gtk3 gtk3-devel			&& \
 	yum -y install freeglut-devel			&& \
 	yum -y install cmake					&& \	
     yum -y update; yum clean all	
@@ -113,6 +65,14 @@ RUN /bin/sh -c 'cd /Python-3.*; ./configure --enable-shared'
 RUN /bin/sh -c 'cd /Python-3.*; LD_RUN_PATH=/usr/local/lib make'
 RUN /bin/sh -c 'cd /Python-3.*; make altinstall'
 
+RUN yum -y install python-pip 
+
+#**** install xfce ****
+ENV TERM xterm
+RUN yum -y install epel-release && \
+	yum --enablerepo=epel -y -x gnome-keyring --skip-broken groups install "Xfce"  && \
+	yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts" 
+	
 
 #**** install GMAT ****
 # 
@@ -123,13 +83,73 @@ RUN  mkdir -p /gmat  && \
 	 git clone --verbose $repo /gmat  
 
 COPY gmat-update.sh /bin/gmat-update.sh
-RUN  chmod a+x /bin/gmat-update.sh
-RUN  cd /gmat && ln -s /gmat /root/Desktop/NASA-GMAT
+RUN  chmod a+x /bin/gmat-update.sh 
+RUN  dos2unix  /bin/gmat-update.sh
+RUN  chmod a+x /gmat/application/bin/*
+RUN  find      /gmat/application/bin -type f -exec dos2unix {} \;
 
+
+#**** noVNC HTML5 based VNC viewer ****
+#	
+# https://github.com/kanaka/noVNC
+#
+ENV NO_VNC_HOME /root/noVNC
+RUN yum -y install which  && \
+    yum -y update; yum clean all
+
+RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
+    wget -qO- https://github.com/kanaka/noVNC/archive/master.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME  && \
+    wget -qO- https://github.com/kanaka/websockify/archive/v0.7.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
+    chmod +x -v /root/noVNC/utils/*.sh	
+
+COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
+
+	
+#**** install vnc server ****
+# VNC server port      : 5901
+# start command        : /root/scripts/vnc_startup.sh
+# default vnc password : vncpassword
+# NoVNC web URL        : http://localhost:6901/vnc_auto.html?password=vncpassword
+
+ENV DISPLAY :1
+ENV VNC_COL_DEPTH 24
+ENV VNC_RESOLUTION 1280x1024
+ENV VNC_PW vncpassword
+
+RUN yum -y install tigervnc-server net-tools  
+
+# copy files and make sure they are in unix format if building on windows host
+
+COPY ./vnc/.vnc    /root/.vnc			
+COPY ./vnc/.config /root/.config
+COPY ./vnc/scripts /root/scripts
+COPY ./vnc/Desktop /root/Desktop
+
+RUN  ln -s /gmat /root/Desktop/GMAT
+
+RUN find /root/.vnc    -type f -exec dos2unix {} \;
+RUN find /root/.config -type f -exec dos2unix {} \;
+RUN find /root/scripts -type f -exec dos2unix {} \;
+RUN find /root/Desktop -type f -exec dos2unix {} \;
+
+
+RUN chmod +x  /etc/xdg/xfce4/xinitrc 	&& \
+	chmod +x  /root/scripts/*.sh 		&& \
+	chmod +x  /root/.vnc/xstartup 		&& \
+	chmod +x  /root/Desktop/*	
+	
+RUN /bin/dbus-uuidgen > /etc/machine-id
+
+	
+	
 
 	
 
 ##############################################################################	
+
+RUN yum -y update --setopt=tsflags=nodocs   && \
+    yum clean all
+
 
 	
 #**** start servers with container deploy
@@ -141,9 +161,9 @@ RUN  cd /gmat && ln -s /gmat /root/Desktop/NASA-GMAT
 # the last command can't exit, or the container will shutdown
 
 
-EXPOSE 80 443
+EXPOSE 80 443 5901
 CMD /usr/sbin/nginx && \
-	/root/scripts/vnc_startup.sh  && \
+	/root/scripts/vnc_startup.sh && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
 	

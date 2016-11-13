@@ -66,10 +66,11 @@ mongodb://admin@localhost
 ```
 cd quindar-deploy/qsrc-simulator
 docker build -t "quindar-qsrc" .
-docker run -d -t --name qsrc --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443  quindar-qsrc
+docker run -d -t --name qsrc --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 -p 5901:5901 quindar-qsrc
 ```
 
-Connect to the server at http://localhost ; Use the GMAT icon on the desktop to start the simulator.
+Connect to the server at http://hostname or you can access the VNC server directly with a VNC client at hostname:5901 using password "vncpassword".
+
 
 
 

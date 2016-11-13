@@ -6,12 +6,12 @@ VNC_PORT="590"${DISPLAY:1}
 NO_VNC_PORT="690"${DISPLAY:1}
 
 ##change vnc password
-echo "change vnc password!"
+echo "setting vnc password ..."
 (echo $VNC_PW && echo $VNC_PW) | vncpasswd
 
 ##start vncserver and noVNC webclient
 $NO_VNC_HOME/utils/launch.sh --vnc $VNC_IP:$VNC_PORT --listen $NO_VNC_PORT &
-vncserver -kill :1 && rm -rfv /tmp/.X* ; echo "remove old vnc locks to be a reattachable container"
+#vncserver -kill :1 && rm -rfv /tmp/.X* ; echo "remove old vnc locks to be a reattachable container"
 vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION
 /etc/xdg/xfce4/xinitrc &
 sleep 1
@@ -19,4 +19,3 @@ sleep 1
 echo -e "\n------------------ VNC environment started ------------------"
 echo -e "\nVNCSERVER started on DISPLAY= $DISPLAY \n\t=> connect via VNC viewer with $VNC_IP:$VNC_PORT"
 echo -e "\nnoVNC HTML client started:\n\t=> connect via http://$VNC_IP:$NO_VNC_PORT/vnc_auto.html?password=..."
-
