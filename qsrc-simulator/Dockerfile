@@ -1,7 +1,7 @@
 # Quindar SRC source (simulation) Server Dockerfile
 #
 
-FROM centos:latest
+FROM centos:7
 MAINTAINER quindar@audacy.space
 LABEL vendor="Audacy"
 
@@ -25,7 +25,6 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 	cd netdata && \
 	./netdata-installer.sh --dont-wait --dont-start-it 
 
-	
 #**** install nginx ****
 # server root    /usr/share/nginx/html
 # server config  /etc/nginx/nginx.conf
@@ -71,40 +70,13 @@ RUN yum -y install python-pip
 ENV TERM xterm
 RUN yum -y install epel-release && \
 	yum --enablerepo=epel -y -x gnome-keyring --skip-broken groups install "Xfce"  && \
-	yum -y groupinstall "Desktop" "Desktop Platform" "X Window System" "Fonts" 
+	yum -y groups install "Fonts" 
+
+# Disable xfce-polkit
+RUN rm /etc/xdg/autostart/xfce-polkit.desktop
+	
 	
 
-#**** install GMAT ****
-# 
-# deploy from github under /gmat
-#
-ENV  repo https://github.com/quindar/quindar-gmat.git
-RUN  mkdir -p /gmat  && \
-	 git clone --verbose $repo /gmat  
-
-COPY gmat-update.sh /bin/gmat-update.sh
-RUN  chmod a+x /bin/gmat-update.sh 
-RUN  dos2unix  /bin/gmat-update.sh
-RUN  chmod a+x /gmat/application/bin/*
-RUN  find      /gmat/application/bin -type f -exec dos2unix {} \;
-
-
-#**** noVNC HTML5 based VNC viewer ****
-#	
-# https://github.com/kanaka/noVNC
-#
-ENV NO_VNC_HOME /root/noVNC
-RUN yum -y install which  && \
-    yum -y update; yum clean all
-
-RUN mkdir -p $NO_VNC_HOME/utils/websockify && \
-    wget -qO- https://github.com/kanaka/noVNC/archive/master.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME  && \
-    wget -qO- https://github.com/kanaka/websockify/archive/v0.7.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
-    chmod +x -v /root/noVNC/utils/*.sh	
-
-COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
-
-	
 #**** install vnc server ****
 # VNC server port      : 5901
 # start command        : /root/scripts/vnc_startup.sh
@@ -112,11 +84,12 @@ COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
 # NoVNC web URL        : http://localhost:6901/vnc_auto.html?password=vncpassword
 
 ENV DISPLAY :1
+ENV NO_VNC_HOME /root/noVNC
 ENV VNC_COL_DEPTH 24
 ENV VNC_RESOLUTION 1280x1024
 ENV VNC_PW vncpassword
 
-RUN yum -y install tigervnc-server net-tools  
+RUN yum -y install tigervnc-server wget which net-tools && yum clean all -y
 
 # copy files and make sure they are in unix format if building on windows host
 
@@ -125,33 +98,52 @@ COPY ./vnc/.config /root/.config
 COPY ./vnc/scripts /root/scripts
 COPY ./vnc/Desktop /root/Desktop
 
-RUN  ln -s /gmat /root/Desktop/GMAT
-
 RUN find /root/.vnc    -type f -exec dos2unix {} \;
 RUN find /root/.config -type f -exec dos2unix {} \;
 RUN find /root/scripts -type f -exec dos2unix {} \;
 RUN find /root/Desktop -type f -exec dos2unix {} \;
 
-
-RUN chmod +x  /etc/xdg/xfce4/xinitrc 	&& \
-	chmod +x  /root/scripts/*.sh 		&& \
-	chmod +x  /root/.vnc/xstartup 		&& \
-	chmod +x  /root/Desktop/*	
-	
-RUN /bin/dbus-uuidgen > /etc/machine-id
-
-	
-	
-
-	
-
-##############################################################################	
-
-RUN yum -y update --setopt=tsflags=nodocs   && \
-    yum clean all
+RUN chmod +x   /etc/xdg/xfce4/xinitrc 	&& \
+	chmod +x   /root/scripts/*.sh 		&& \
+	chmod +x   /root/.vnc/xstartup 		&& \
+	chmod 775  /root/Desktop/*	
 
 
-	
+#**** noVNC HTML5 based VNC viewer ****
+#	
+# https://github.com/kanaka/noVNC
+#
+
+RUN mkdir -p $NO_VNC_HOME/utils/websockify \
+    && wget -qO- https://github.com/kanaka/noVNC/archive/v0.6.1.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME \
+    && wget -qO- https://github.com/kanaka/websockify/archive/v0.8.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify \
+    && chmod +x -v /root/noVNC/utils/*.sh
+
+COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
+RUN  /bin/dbus-uuidgen > /etc/machine-id
+
+
+
+#**** install GMAT ****
+# 
+# deploy from github under /gmat
+#
+
+RUN  mkdir -p /gmat  
+COPY gmat-update.sh /bin/gmat-update.sh
+RUN  chmod a+x /bin/gmat-update.sh 
+RUN  dos2unix  /bin/gmat-update.sh
+RUN  ln -s /gmat /root/Desktop/GMAT
+
+# ENV  repo https://github.com/quindar/quindar-gmat.git
+# RUN	 git clone --verbose $repo /gmat  
+# RUN  chmod a+x /gmat/application/bin/*
+# RUN  find      /gmat/application/bin -type f -exec dos2unix {} \;
+
+
+
+#^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^#
+
 #**** start servers with container deploy
 # 
 # (1) nginx (80,443)
@@ -161,11 +153,7 @@ RUN yum -y update --setopt=tsflags=nodocs   && \
 # the last command can't exit, or the container will shutdown
 
 
-EXPOSE 80 443 5901
+EXPOSE 80 443 5901 6901
 CMD /usr/sbin/nginx && \
 	/root/scripts/vnc_startup.sh && \
 	/usr/sbin/netdata -D -s /host -p 19999 
- 
-	
-
-
