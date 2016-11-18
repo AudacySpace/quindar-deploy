@@ -8,7 +8,7 @@ LABEL vendor="Audacy"
 
 # run system update & install utils
 RUN yum -y update --setopt=tsflags=nodocs   && \
-	yum -y install git wget nano curl make
+	yum -y install git wget nano curl make dos2unix
 
 
 ##############################################################################
@@ -74,7 +74,10 @@ COPY index.html /usr/share/nginx/html
 #
 ENV  repo https://github.com/quindar/quindar-ux.git
 COPY node-update.sh /bin/node-update.sh
-RUN  chmod a+x /bin/node-update.sh
+
+RUN  dos2unix  /bin/node-update.sh  && \
+	 chmod a+x /bin/node-update.sh
+	 
 RUN  mkdir -p /node  && \
 	 git clone --verbose $repo /node  && \
 	 cd /node && \

@@ -28,10 +28,12 @@ npm install
 # the last command below accomplishes that by startig in the background and 
 # redirecting both terminal input and output to the bit bucket.
 
-echo "---------------------------------------------------------------------"
-echo "bouncing node server  ..."
-echo "---------------------------------------------------------------------"
-npm stop
-(npm start) </dev/null >/dev/null 2>/dev/null &
+# the node server is run in autostart using pm2. However, if the branch is switched
+# or a new module is installed via npm update, it is possible that pm2 already 
+# exited with the max number of restarts at this point. The command below brings 
+# the process back from the dead if needed.
 
-
+echo "---------------------------------------------------------------------"
+echo "bouncing node server (via pm2) ..."
+echo "---------------------------------------------------------------------"
+pm2 restart index
