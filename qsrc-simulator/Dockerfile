@@ -49,6 +49,10 @@ COPY ./nginx/server.key /etc/ssl/server.key
 COPY ./nginx/index.html /usr/share/nginx/html
 RUN  chmod 600  /etc/ssl/server.key
 
+#**** install openssl-devel ***
+# Required for Python to use socket.io
+RUN yum -y install openssl-devel
+
 #**** install Python ****
 # 
 RUN yum -y groupinstall "Development Tools" && \
