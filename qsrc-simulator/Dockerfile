@@ -8,7 +8,7 @@ LABEL vendor="Audacy"
 
 # run system update & install utils
 RUN yum -y update --setopt=tsflags=nodocs   && \
-	yum -y install git wget nano curl make dos2unix npm && \
+	yum -y install git wget nano curl make dos2unix && \
     yum clean all
 
 ##############################################################################
@@ -129,7 +129,6 @@ COPY ./nginx/redirect.html $NO_VNC_HOME/index.html
 RUN  /bin/dbus-uuidgen > /etc/machine-id
 
 
-
 #**** install GMAT ****
 # 
 # deploy from github under /gmat
@@ -146,6 +145,10 @@ RUN	 git clone --verbose $repo /gmat
 RUN  chmod a+x /gmat/application/bin/*
 RUN  find      /gmat/application/bin -type f -exec dos2unix {} \;
 
+
+#**** install npm ****
+# npm is used for buildme.sh 
+RUN yum -y install npm 
 
 
 ##############################################################################
