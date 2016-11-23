@@ -8,7 +8,7 @@ LABEL vendor="Audacy"
 
 # run system update & install utils
 RUN yum -y update --setopt=tsflags=nodocs   && \
-	yum -y install git wget nano curl make dos2unix  && \
+	yum -y install git wget nano curl make dos2unix npm && \
     yum clean all
 
 ##############################################################################
@@ -49,9 +49,11 @@ COPY ./nginx/server.key /etc/ssl/server.key
 COPY ./nginx/index.html /usr/share/nginx/html
 RUN  chmod 600  /etc/ssl/server.key
 
+
 #**** install openssl-devel ***
 # Required for Python to use socket.io
 RUN yum -y install openssl-devel
+
 
 #**** install Python ****
 # 
