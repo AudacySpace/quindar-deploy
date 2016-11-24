@@ -62,7 +62,7 @@ mongodb://admin@localhost
 To update the quindar proxy node app inside the container after deployment, use the following command (on the host).
 
 ```
-docker exec qux proxy-update.sh <branch>
+docker exec qsvr proxy-update.sh <branch>
 ```
 
 
