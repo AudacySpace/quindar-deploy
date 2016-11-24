@@ -42,7 +42,7 @@ The quindar gui will be running on http://hostname
 You can update the node application after the docker container is deployed (running) from the host by running the following command (on the host); the last parameter is the name of the repo branch you want to use for the update; either "master" for production, or "develop" for the development branch. This is useful for either scheduled updates or build automation via Jenkins, etc. 
 
 ```
-sudo docker exec qux node-update.sh <branch>
+docker exec qux node-update.sh <branch>
 ```
 
 
@@ -57,6 +57,12 @@ The database will be available on port 27017, and the server gui will be running
 
 ```
 mongodb://admin@localhost
+```
+
+To update the quindar proxy node app inside the container after deployment, use the following command (on the host).
+
+```
+docker exec qux proxy-update.sh <branch>
 ```
 
 
