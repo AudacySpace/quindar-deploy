@@ -1,4 +1,7 @@
 # quindar-deploy
+
+Updated: Dec 01,2016
+
 Files needed to deploy (install) Quindar; the complete Quindar platform has three components:
 
 1. The front end (gui)          > quindar-ux
