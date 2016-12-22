@@ -137,7 +137,7 @@ RUN  chmod 600  /etc/ssl/server.key
 EXPOSE 80 443 27017
 CMD /usr/sbin/nginx && \
 	/usr/sbin/netdata -s /host -p 19999 && \
-	cd /node/proxy && (pm2 start index.js --no-daemon --watch &) && \
+	cd /node/proxy && (pm2 start index.js --no-daemon --watch --log-date-format "YYYY-MM-DD HH:mm:ss Z" &) && \
 	cd /node/adminMongo && (npm start &)  && \
 	/usr/bin/mongod
  

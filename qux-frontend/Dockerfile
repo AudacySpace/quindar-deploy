@@ -99,7 +99,7 @@ RUN  mkdir -p /node  && \
 
 EXPOSE 80 443
 CMD /usr/sbin/nginx && \
-	cd /node && (pm2 start index.js --no-daemon --watch &) && \
+	cd /node && (pm2 start index.js --no-daemon --watch --log-date-format "YYYY-MM-DD HH:mm:ss Z" &) && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
 	
