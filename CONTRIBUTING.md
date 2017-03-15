@@ -23,6 +23,15 @@ If you found a bug,
 
 Look at the README file for instructions on how to run Quindar in a local development environment. Any changes to the docker build files used to deploy Quindar should be tested on / compatible with multiple platforms (pc, mac, linux). To make a change, please create a feature branch (under the develop branch), make changes as proposed; then submit a pull request to the develop branch. 
 
+### Style Guides
+We're not super strict on style guides yet, but as Quindar grows and we increasingly automate the DevOps / QA processes, consistent coding style is increasingly important. To future proof your code, please consult the following guidelines:
+
+* [Angular v1 Guide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md)
+* [Javascript Guide](https://google.github.io/styleguide/jsguide.html)
+* [CSS+JS Guide](https://github.com/airbnb/javascript/tree/master/css-in-javascript)
+* [HTML5 Guide](https://www.w3schools.com/html/html5_syntax.asp)
+* [Dockerfile Guide](https://docs.docker.com/engine/userguide/eng-image/dockerfile_best-practices/)
+
 ## To Do
 
 * dockerhub integration for faster deployment
