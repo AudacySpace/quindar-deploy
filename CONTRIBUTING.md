@@ -23,3 +23,7 @@ If you found a bug,
 
 Look at the README file for instructions on how to run Quindar in a local development environment. Any changes to the docker build files used to deploy Quindar should be tested on / compatible with multiple platforms (pc, mac, linux). To make a change, please create a feature branch (under the develop branch), make changes as proposed; then submit a pull request to the develop branch. 
 
+## To Do
+
+* dockerhub integration for faster deployment
+* security hardening
