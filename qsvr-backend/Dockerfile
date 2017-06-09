@@ -86,9 +86,11 @@ RUN  mkdir -p /node/proxy  && \
 # start command: npm start
 # connection string for db : mongodb://admin@localhost
 # the UI will be up on https://hostname/adminMongo/
-RUN  mkdir -p /node/adminMongo  && \
-	 cd /node/adminMongo && \
-	 npm install admin-mongo
+RUN  mkdir -p /node  && \
+	 cd /node && \
+	 npm install admin-mongo && \
+	 mv node_modules/admin-mongo/ ./adminMongo && \
+	 cd adminMongo && npm install
 
 # file needed to proxy adminMongo in a subfolder URL
 # see http://adminmongo.com/docs/
