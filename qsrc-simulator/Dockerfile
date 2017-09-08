@@ -50,8 +50,8 @@ COPY ./nginx/index.html /usr/share/nginx/html
 RUN  chmod 600  /etc/ssl/server.key
 
 # create volume to share nginx logs with filebeat
-VOLUME /var/log/nginx
 RUN  chmod 755  /var/log/nginx
+VOLUME /var/log/nginx
 
 #**** install openssl-devel ***
 # Required for Python to use socket.io
