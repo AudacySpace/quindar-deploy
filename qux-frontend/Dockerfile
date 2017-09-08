@@ -65,7 +65,9 @@ COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
 COPY index.html /usr/share/nginx/html
 
-	
+# create volume to share nginx logs with filebeat
+VOLUME /var/log/nginx
+RUN  chmod 755  /var/log/nginx
 
 #**** deploy quindar app ****
 # deploy from github under /node

@@ -121,6 +121,10 @@ COPY nginx/index.html /usr/share/nginx/html
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 RUN  chmod 600  /etc/ssl/server.key
 
+# create volume to share nginx logs with filebeat
+VOLUME /var/log/nginx
+RUN  chmod 755  /var/log/nginx
+
 # create a directory to store the uploaded files
 RUN  mkdir -p /tmp/uploads
 	
