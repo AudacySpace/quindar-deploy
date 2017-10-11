@@ -1,0 +1,29 @@
+FROM quindar-qsvr
+
+RUN yum -y install Xvfb libXfont Xorg chromium gnu-free-sans-fonts
+
+ENV DISPLAY=:99.0  
+ENV CHROME_BIN=/usr/bin/chromium-browser
+
+ARG BRANCH
+
+RUN echo $BRANCH
+
+RUN cd /node/proxy && \
+    git checkout $BRANCH && \
+	git pull && \
+	npm install
+
+RUN cd /node/proxy && \
+    npm install karma karma-jasmine jasmine-core karma-chrome-launcher --save-dev && \
+    npm install karma-spec-reporter --save-dev && \
+    npm install -g karma-cli
+
+RUN cd /node/proxy && \
+	npm install angular angular-ui-router angular-mocks --save-dev && \
+	npm install angular-animate angular-aria angular-messages angular-material --save-dev && \
+	npm install ng-file-upload --save-dev
+
+CMD (/usr/bin/Xvfb :99 &) && \
+	cd /node/proxy && npm test
+
