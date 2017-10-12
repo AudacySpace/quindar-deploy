@@ -1,5 +1,7 @@
 FROM quindar-qsvr
 
+RUN yum -y install nss
+
 RUN yum -y install Xvfb libXfont Xorg chromium gnu-free-sans-fonts
 
 ENV DISPLAY=:99.0  
