@@ -1,4 +1,7 @@
 # quindar-deploy
+
+Updated: Jun 14, 2016
+
 Files needed to deploy (install) Quindar; the complete Quindar platform has three components:
 
 1. The front end (gui)          > quindar-ux
@@ -16,7 +19,7 @@ Install the pre-requisites on the host server(s). You can deploy all three compo
 Step 2 - Clone this repository 
 
 ```
-git clone https://github.com/quindar/quindar-deploy
+git clone https://github.com/AudacySpace/quindar-deploy
 ```
 
 The nginx servers are deployed with self-signed certificates which will throw security warnings in your browser. In a production environment, SSH into the servers and (1) update server name, (2) install your own certs. 

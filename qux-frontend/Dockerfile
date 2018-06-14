@@ -74,7 +74,7 @@ VOLUME /var/log/nginx
 # node server should run on port 5000 > proxied via nginx to 443
 # start command: npm start
 #
-ENV  repo https://github.com/quindar/quindar-ux.git
+ENV  repo https://github.com/AudacySpace/quindar-ux.git
 COPY node-update.sh /bin/node-update.sh
 
 RUN  dos2unix  /bin/node-update.sh  && \

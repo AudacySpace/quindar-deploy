@@ -68,7 +68,7 @@ RUN yum install -y mongodb-org && \
 # node server should run on port 5000 > proxied via nginx to 443
 # start command: npm start
 #
-ENV  repo https://github.com/quindar/quindar-proxy.git
+ENV  repo https://github.com/AudacySpace/quindar-proxy.git
 COPY proxy-update.sh /bin/proxy-update.sh
 
 RUN  dos2unix  /bin/proxy-update.sh  && \
