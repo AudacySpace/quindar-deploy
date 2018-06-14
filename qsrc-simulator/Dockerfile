@@ -143,7 +143,7 @@ RUN  chmod a+x /bin/gmat-update.sh
 RUN  dos2unix  /bin/gmat-update.sh
 RUN  ln -s /gmat /root/Desktop/GMAT
 
-ENV  repo https://github.com/quindar/quindar-gmat.git
+ENV  repo https://github.com/AudacySpace/quindar-gmat.git
 RUN	 git clone --verbose $repo /gmat  
 RUN  chmod a+x /gmat/application/bin/*
 RUN  find      /gmat/application/bin -type f -exec dos2unix {} \;
