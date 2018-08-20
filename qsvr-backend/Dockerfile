@@ -127,6 +127,11 @@ VOLUME /var/log/nginx
 
 # create a directory to store the uploaded files
 RUN  mkdir -p /tmp/uploads
+
+#**** install logrotate for pm2 ****
+RUN pm2 install pm2-logrotate && \
+	pm2 set pm2-logrotate:compress true && \
+	pm2 set pm2-logrotate:retain 7
 	
 ##############################################################################	
 
