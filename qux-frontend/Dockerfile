@@ -69,6 +69,11 @@ COPY index.html /usr/share/nginx/html
 RUN  chmod 755  /var/log/nginx
 VOLUME /var/log/nginx
 
+#**** install logrotate for pm2 ****
+RUN pm2 install pm2-logrotate && \
+	pm2 set pm2-logrotate:compress true && \
+	pm2 set pm2-logrotate:retain 7
+
 #**** deploy quindar app ****
 # deploy from github under /node
 # node server should run on port 5000 > proxied via nginx to 443
