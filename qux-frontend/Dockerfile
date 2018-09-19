@@ -90,7 +90,10 @@ RUN  mkdir -p /node  && \
 	 cd /node && \
 	 npm install
 		
-	
+#**** add build argument to environment variable ****
+# only environment variables can be used in CMD commands
+ARG ENVIRONMENT
+ENV ENVIRONMENT ${ENVIRONMENT}
 
 ##############################################################################	
 
@@ -106,7 +109,7 @@ RUN  mkdir -p /node  && \
 
 EXPOSE 80 443
 CMD /usr/sbin/nginx && \
-	cd /node && (pm2 start index.js --no-daemon --watch --log-date-format "YYYY-MM-DD HH:mm:ss Z" &) && \
+	cd /node && (pm2 start ecosystem.config.js --env ${ENVIRONMENT} --no-daemon &) && \
 	/usr/sbin/netdata -D -s /host -p 19999 
  
 	
