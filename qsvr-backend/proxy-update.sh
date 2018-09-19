@@ -10,7 +10,7 @@ echo "====================================================================="
 echo "Updating node/proxy code via GitHub pull"
 echo "---------------------------------------------------------------------"
 cd /node/proxy
-git checkout -- package-lock.json
+rm -f package-lock.json
 
 if [ "$#" -gt 0 ]; then
 	echo "switching to branch $1"
@@ -37,4 +37,4 @@ npm install
 echo "---------------------------------------------------------------------"
 echo "bouncing node server (via pm2) ..."
 echo "---------------------------------------------------------------------"
-pm2 restart index
+pm2 restart proxy || (pm2 start ecosystem.config.js --env ${ENVIRONMENT} &)

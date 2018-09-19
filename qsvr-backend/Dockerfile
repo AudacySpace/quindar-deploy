@@ -89,6 +89,11 @@ RUN  mkdir -p /tmp/uploads
 RUN pm2 install pm2-logrotate && \
 	pm2 set pm2-logrotate:compress true && \
 	pm2 set pm2-logrotate:retain 7
+
+#**** add build argument to environment variable ****
+# only environment variables can be used in CMD commands
+ARG ENVIRONMENT
+ENV ENVIRONMENT ${ENVIRONMENT}
 	
 ##############################################################################	
 
@@ -104,5 +109,5 @@ RUN pm2 install pm2-logrotate && \
 
 EXPOSE 80 443
 CMD /usr/sbin/nginx && \
-	cd /node/proxy && (pm2 start index.js --no-daemon --watch --log-date-format "YYYY-MM-DD HH:mm:ss Z" &) && \
+	cd /node/proxy && (pm2 start ecosystem.config.js --env ${ENVIRONMENT} --no-daemon &) && \
 	/usr/sbin/netdata -D -s /host -p 19999

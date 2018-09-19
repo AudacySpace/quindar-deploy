@@ -10,6 +10,7 @@ echo "====================================================================="
 echo "Updating node code via GitHub pull"
 echo "---------------------------------------------------------------------"
 cd /node
+rm -f package-lock.json
 
 if [ "$#" -gt 0 ]; then
 	echo "switching to branch $1"
@@ -36,4 +37,4 @@ npm install
 echo "---------------------------------------------------------------------"
 echo "bouncing node server (via pm2) ..."
 echo "---------------------------------------------------------------------"
-pm2 restart index
+pm2 restart quindar || (pm2 start ecosystem.config.js --env ${ENVIRONMENT} &)
