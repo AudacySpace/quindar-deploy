@@ -48,6 +48,13 @@ You can update the node application after the docker container is deployed (runn
 docker exec qux node-update.sh <branch>
 ```
 
+To test the application by executing automated tests before deploying the new code, you can run a script with branch name as the argument
+
+```
+cd quindar-deploy/qux-frontend
+./deploy.sh <branch>
+```
+
 
 # qsvr Install
 
@@ -56,16 +63,18 @@ cd quindar-deploy/qsvr-backend
 docker build -t "quindar-qsvr" .
 docker run -d -t --name qsvr --cap-add SYS_PTRACE -v /proc:/host/proc:ro -v /sys:/host/sys:ro -p 80:80 -p 443:443 -p 27017:27017 quindar-qsvr
 ```
-The database will be available on port 27017, and the server gui will be running on http://hostname. To connect to the database admin interface, click on the "Login" link (forwards to https://hostname) and use the following connection string in the admin gui to link the database:
-
-```
-mongodb://admin@localhost
-```
 
 To update the quindar proxy node app inside the container after deployment, use the following command (on the host).
 
 ```
 docker exec qsvr proxy-update.sh <branch>
+```
+
+To test the application by executing automated tests before deploying the new code, you can run a script with branch name as the argument
+
+```
+cd quindar-deploy/qsvr-backend
+./deploy.sh <branch>
 ```
 
 

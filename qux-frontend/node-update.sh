@@ -10,11 +10,16 @@ echo "====================================================================="
 echo "Updating node code via GitHub pull"
 echo "---------------------------------------------------------------------"
 cd /node
-rm -f package-lock.json
+git checkout -- package-lock.json || rm -f package-lock.json
 
 if [ "$#" -gt 0 ]; then
 	echo "switching to branch $1"
 	git checkout $1
+fi
+
+if [ "${ENVIRONMENT}" == "" ]
+then
+  ENVIRONMENT="development"
 fi
 
 git pull
