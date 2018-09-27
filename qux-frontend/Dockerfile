@@ -65,6 +65,13 @@ COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
 COPY index.html /usr/share/nginx/html
 
+RUN yum install -y openssl-devel
+
+RUN git clone https://www.agwa.name/git/git-crypt.git && \
+	cd git-crypt && \
+	make && \
+	make install
+
 # create volume to share nginx logs with filebeat
 RUN  chmod 755  /var/log/nginx
 VOLUME /var/log/nginx
@@ -89,7 +96,9 @@ RUN  mkdir -p /node  && \
 	 git clone --verbose $repo /node  && \
 	 cd /node && \
 	 npm install
-		
+
+WORKDIR /node
+
 #**** add build argument to environment variable ****
 # only environment variables can be used in CMD commands
 ARG ENVIRONMENT
