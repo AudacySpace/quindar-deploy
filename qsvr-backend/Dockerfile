@@ -82,6 +82,15 @@ RUN  chmod 600  /etc/ssl/server.key
 RUN  chmod 755  /var/log/nginx
 VOLUME /var/log/nginx
 
+#**** install git-crypt ****
+# openssl development headers and git are prerequisites
+RUN yum install -y openssl-devel
+
+RUN git clone https://www.agwa.name/git/git-crypt.git && \
+	cd git-crypt && \
+	make && \
+	make install
+
 # create a directory to store the uploaded files
 RUN  mkdir -p /tmp/uploads
 
@@ -89,6 +98,8 @@ RUN  mkdir -p /tmp/uploads
 RUN pm2 install pm2-logrotate && \
 	pm2 set pm2-logrotate:compress true && \
 	pm2 set pm2-logrotate:retain 7
+
+WORKDIR /node/proxy
 
 #**** add build argument to environment variable ****
 # only environment variables can be used in CMD commands
