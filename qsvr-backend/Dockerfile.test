@@ -12,7 +12,6 @@ ARG BRANCH
 RUN echo $BRANCH
 
 RUN cd /node/proxy && \
-    rm -f package-lock.json && \
     git checkout $BRANCH && \
 	git pull && \
 	npm install
