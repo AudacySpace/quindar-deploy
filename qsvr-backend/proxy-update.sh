@@ -10,7 +10,6 @@ echo "====================================================================="
 echo "Updating node/proxy code via GitHub pull"
 echo "---------------------------------------------------------------------"
 cd /node/proxy
-git checkout -- package-lock.json || rm -f package-lock.json
 
 if [ "$#" -gt 0 ]; then
 	echo "switching to branch $1"

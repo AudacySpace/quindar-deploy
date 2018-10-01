@@ -65,6 +65,8 @@ COPY server.key /etc/ssl/server.key
 RUN  chmod 600  /etc/ssl/server.key
 COPY index.html /usr/share/nginx/html
 
+#**** install git-crypt ****
+# openssl development headers and git are prerequisites
 RUN yum install -y openssl-devel
 
 RUN git clone https://www.agwa.name/git/git-crypt.git && \
