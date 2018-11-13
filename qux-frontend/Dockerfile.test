@@ -15,8 +15,6 @@ RUN cd /node && \
 	npm install
 
 RUN cd /node && \
-    npm install karma karma-jasmine jasmine-core karma-chrome-launcher --save-dev && \
-    npm install karma-spec-reporter --save-dev && \
     npm install -g karma-cli
 
 CMD (/usr/bin/Xvfb :99 &) && \
