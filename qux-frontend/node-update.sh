@@ -26,7 +26,7 @@ git pull
 echo "---------------------------------------------------------------------"
 echo "installing new code  ..."
 echo "---------------------------------------------------------------------"
-npm install
+npm install --no-save
 
 # note that in order to call this script from the docker host, remote SSH, etc
 # it must start the node server as a background services and immediately return
