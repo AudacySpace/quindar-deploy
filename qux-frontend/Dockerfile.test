@@ -12,7 +12,7 @@ RUN echo $BRANCH
 RUN cd /node && \
     git checkout $BRANCH && \
 	git pull && \
-	npm install
+	npm install --no-save
 
 RUN cd /node && \
     npm install -g karma-cli

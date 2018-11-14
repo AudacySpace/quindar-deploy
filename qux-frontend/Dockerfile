@@ -97,7 +97,7 @@ RUN  dos2unix  /bin/node-update.sh  && \
 RUN  mkdir -p /node  && \
 	 git clone --verbose $repo /node  && \
 	 cd /node && \
-	 npm install
+	 npm install --no-save
 
 WORKDIR /node
 
